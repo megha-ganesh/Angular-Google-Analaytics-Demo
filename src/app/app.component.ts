@@ -1,4 +1,8 @@
 import { Component } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router'; 
+
+// declare ga as a function to access the JS code in TS
+declare let ga: Function;
 
 @Component({
   selector: 'app-root',
@@ -6,5 +10,15 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'Angular10GoogleAnalyticsDemo';
+
+   constructor(public router: Router) {
+
+    this.router.events.subscribe(event => {
+
+      if (event instanceof NavigationEnd) {
+        ga('set', 'page', event.urlAfterRedirects);
+        ga('send', 'pageview');
+      }
+    });
+  }
 }
